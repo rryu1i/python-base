@@ -20,15 +20,12 @@ templatepath = os.path.join(path, templatename)  # email_tmpl.txt
 
 clientes = []
 for line in open(filepath):
-    # TODO: Substituir por list comprehension
-    clientes.append(line.split(","))
-
-for name, email in clientes:
-    print(f"Enviando email para: {email}")
+    nome, email = line.split(",")
+    print()
     print(
         open(templatepath).read()
         % {
-            "nome": name,
+            "nome": nome,
             "produto": "caneta",
             "texto": "Escrever muito bem",
             "link": "https://canetaslegais.com",
