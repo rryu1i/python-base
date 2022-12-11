@@ -34,10 +34,18 @@ arguments = {
 }
 
 for arg in sys.argv[1:]:
-    # TODO: Tratar ValueError
-    key, value = arg.split("=")  # retorna lista com key na pos 0 e value na pos 1
+    try:
+        key, value = arg.split("=")  # retorna lista com key na pos 0 e value na pos 1 -> ocorre ValueError se nao tiver com o =
+    except ValueError as e:
+        print(f"[ERROR] {str(e)}")
+        print("You need to use '='")
+        print(f"You passed {arg}")
+        print("try with --key=value")
+        sys.exit(1)
+
     key = key.lstrip("-").strip()  # lstrip pega todos os - do lado esquerda e remove
     value = value.strip()
+    # Validacao
     if key not in arguments:  
         print(f"Invalid Option '{key}'")
         sys.exit()
@@ -62,5 +70,17 @@ msg = {
     "fr_FR": "Bonjour, Monde!"
 }
 
-# O(1) - Constante - "IN"
-print(msg[current_language] * int(arguments["count"]))
+
+"""
+message = msg.get(current_language, msg["en_US"])
+"""
+
+# EAFP 
+try:
+    message = msg[current_language]
+except KeyError as e:
+    print(f"[Error] {str(e)}")
+    print(f"Language is invalid, choose from {list(msg.keys())}")
+    sys.exit(1)
+
+print(message * int(arguments["count"]))
