@@ -43,7 +43,12 @@ if arguments[0] == "read":
 
 
 if arguments[0] == "new":
-    titulo = arguments[1]  # TODO: Tratar exception
+    try:
+        titulo = arguments[1]
+    except IndexError as e:
+        print(f"[Error] {str(e)}")
+        print("Please add a title")
+        sys.exit(1)
     text = [
         f"{titulo}",
         input("tag:").strip(),
