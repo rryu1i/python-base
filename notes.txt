@@ -1,0 +1,3 @@
+Primeira nota	geral	Minha primeira nota
+Segunda nota	tech	python
+Terceira nota	geral	Minha terceira nota
