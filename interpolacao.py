@@ -1,25 +1,34 @@
-email_templ = """
-Ola, %(nome)s
+#!/user/bin/env python3
+"""Imprime a mensagem de um e-mail"""
 
-Tem interesse em comprar %(produto)s?
+__version__ = "0.1.1"
 
-Este produto e otimo para resolver
-%(texto)s
+import os
+import sys
 
-Clique agora em link %(link)s
+arguments = sys.argv[1:]
+if not arguments:
+    print("Informe o arquivo com os emails")
+    sys.exit(1)
 
-Apenas %(quantidade)d disponiveis!
+filename = arguments[0]
+templatename = arguments[1]
 
-Preco promocional %(preco).2f
-"""
+path = os.curdir
+filepath = os.path.join(path, filename)  # emails.txt
+templatepath = os.path.join(path, templatename)  # email_tmpl.txt
 
-clientes = ["Maria", "Joao", "Bruno"]
+clientes = []
+for line in open(filepath):
+    # TODO: Substituir por list comprehension
+    clientes.append(line.split(","))
 
-for cliente in clientes:
+for name, email in clientes:
+    print(f"Enviando email para: {email}")
     print(
-        email_templ
+        open(templatepath).read()
         % {
-            "nome": cliente,
+            "nome": name,
             "produto": "caneta",
             "texto": "Escrever muito bem",
             "link": "https://canetaslegais.com",
@@ -27,4 +36,5 @@ for cliente in clientes:
             "preco": 50.5
         }
     )
+    print("-" * 50)
 
