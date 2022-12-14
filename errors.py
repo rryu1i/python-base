@@ -24,7 +24,7 @@ log = logging.Logger("errors")
 #     sys.exit(1)
 
 # EAFP - Easy to Ask forgiveness than permission
-
+"""
 def try_to_open_a_file(filepath, retry = 1):
     for attempt in range(1, retry + 1):
         try:
@@ -38,6 +38,29 @@ def try_to_open_a_file(filepath, retry = 1):
             print("Execute isso sempre!")
     return []
 
+for line in try_to_open_a_file("names.txt", retry = 5):
+    print(line)
+"""
 
-for line in try_to_open_a_file("names.txt"):
+# com recursao
+
+def try_to_open_a_file(filepath, retry = 1):
+    if retry > 999:
+        raise ValueError("Retry cannot be above 999")
+        try:
+            return open(filepath).readlines()  # mesmo se o retry fosse 10, se o return for bem sucessido ele da o break.
+        except FileNotFoundError as e:
+            log.error("ERRO: %s", e)
+            time.sleep(2)
+            if retry > 1:
+                #recursao
+                return try_to_open_a_file(filepath, retry=retry - 1)
+        else:  # so ocorre quando nao entra no except
+            print("Sucesso!!")
+        finally:  # sempre vai rodar
+            print("Execute isso sempre!")
+    return []
+
+
+for line in try_to_open_a_file("names.txt", retry = 5):
     print(line)
