@@ -10,6 +10,8 @@ names = [
 ]
 
 
+# estilo imperativo
+
 def starts_with_b(text):
     """Return bool if text starts with b"""
     return text[0].lower() == "b"
@@ -21,3 +23,7 @@ for name in filtro:
     print(name)
 
 print(*list(filter(starts_with_b, names)))
+
+
+# estilo funcional
+print(*list(filter(lambda text: text[0].lower() == "b", names)), sep="\n")

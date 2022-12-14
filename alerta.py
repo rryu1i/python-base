@@ -20,43 +20,37 @@ umidade: 90
 """
 import logging
 import sys
+from typing import Dict
+
 log = logging.Logger("Alerta")
 
-"""
-try:
-    temperatura = float(input("Qual a temperatura? ").strip())
-except ValueError:
-    log.error("Temperatura Invalida")
-    sys.exit(1)
 
-try:
-    umidade = float(input("Qual a umidade do ar? ").strip())
-except ValueError:
-    log.error("Umidade Invalida")
-    sys.exit(1)
-"""
+def is_completely_filled(dict_of_inputs: Dict) -> bool:
+    """Returns a boolean telling if a dict is completely filled."""
+    info_size = len(dict_of_inputs.values())
+    filled_size = len([value for value in dict_of_inputs.values() if value is not None])
+    return info_size == filled_size
+    
+def read_inputs_for_dict(dict_of_info):
+    """Reads information for a dict from user input."""
+    for key in dict_of_info.keys():
+        if dict_of_info[key] is not None:
+            continue
+        try:
+            dict_of_info[key] = int(input(f"Qual a {key}? ").strip())
+        except ValueError:
+            log.error(f"{key} Invalida")
+            break
 
 info = {
     "temperatura": None,
     "umidade": None
 }
 
-while True:
-    # Condicao de parada
-    # O dicionario esta completamente preenchido
-    info_size = len(info.values())
-    filled_size = len([value for value in info.values() if value is not None])
-    if info_size == filled_size:
-        break
+# PROGRAMA PRINCIPAL
 
-    for key in info.keys():
-        if info[key] is not None:
-            continue
-        try:
-            info[key] = int(input(f"Qual a {key}? ").strip())
-        except ValueError:
-            log.error(f"{key} Invalida")
-            break
+while not is_completely_filled(info):
+    read_inputs_for_dict(info)
 
 temperatura, umidade = info.values()
 
