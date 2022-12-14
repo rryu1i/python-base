@@ -2,6 +2,10 @@
 
 import sys
 import os
+import logging
+import time
+
+log = logging.Logger("errors")
 
 # LBYL - Look Before You leap
 
@@ -21,21 +25,19 @@ import os
 
 # EAFP - Easy to Ask forgiveness than permission
 
-try:
-    names = open("names.txt").readlines()
-# except:  # Bare Except
-except FileNotFoundError as e:
-    print(f"{str(e)}.")
-    sys.exit(1)
-    # TODO: Usar retry
-else:  # so ocorre quando nao entra no except
-    print("Sucesso!!")
-finally:  # sempre vai rodar
-    print("Execute isso sempre!")
+def try_to_open_a_file(filepath, retry = 1):
+    for attempt in range(1, retry + 1):
+        try:
+            return open(filepath).readlines()  # mesmo se o retry fosse 10, se o return for bem sucessido ele da o break.
+        except FileNotFoundError as e:
+            log.error("ERRO: %s", e)
+            time.sleep(2)
+        else:  # so ocorre quando nao entra no except
+            print("Sucesso!!")
+        finally:  # sempre vai rodar
+            print("Execute isso sempre!")
+    return []
 
 
-try:
-    print(names[2])
-except:
-    print("[Error] Missing name in the list")
-    sys.exit(1)
+for line in try_to_open_a_file("names.txt"):
+    print(line)
